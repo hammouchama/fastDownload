@@ -2,6 +2,8 @@ from flask import Flask, request, Response, jsonify, render_template
 from yt_dlp import YoutubeDL
 import io
 import requests
+from werkzeug.utils import quote as url_quote
+
 
 app = Flask(__name__)
 
