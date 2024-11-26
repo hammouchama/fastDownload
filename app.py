@@ -1,8 +1,7 @@
-from flask import Flask, request, Response, jsonify, render_template
+from flask import Flask, request, Response, jsonify, render_template, make_response
 from yt_dlp import YoutubeDL
 import io
 import requests
-
 
 
 app = Flask(__name__)
@@ -10,7 +9,13 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    response = make_response(render_template("index.html"))
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; "
+        "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;"
+    )
+    return response
 
 
 def stream_media(video_url, media_type):
@@ -71,14 +76,6 @@ def download():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
-@app.after_request
-def set_csp_headers(response):
-    response.headers["Content-Security-Policy"] = (
-        "default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com;"
-    )
-    return response
 
 
 if __name__ == "__main__":
