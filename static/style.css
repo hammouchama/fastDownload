@@ -16,6 +16,20 @@ body {
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 6%;
+  margin: 20px 0;
+}
+.mp3 {
+  background-color: #559108;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 10px 20px;
+}
 
 input[type="text"] {
   width: 80%;

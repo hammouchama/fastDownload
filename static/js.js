@@ -1,8 +1,9 @@
-const submit = document.getElementById("submit");
+const videoButton = document.getElementById("video-download");
+const audioButton = document.getElementById("audio-download");
 const input = document.getElementById("url");
 
-submit.addEventListener("click", () => {
-  const videoUrl = input.value;
+function downloadMedia(type) {
+  const videoUrl = input.value.trim();
 
   if (!videoUrl) {
     Swal.fire({
@@ -12,6 +13,7 @@ submit.addEventListener("click", () => {
     });
     return;
   }
+
   // Show the loading alert
   let timerInterval;
   input.value = "";
@@ -31,14 +33,18 @@ submit.addEventListener("click", () => {
       clearInterval(timerInterval);
     },
   });
+
+  // Post request to backend
   axios
     .post(
       "http://127.0.0.1:5000/download",
-      { video_url: videoUrl },
+      { video_url: videoUrl, media_type: type },
       { responseType: "blob" }
     )
     .then((response) => {
-      const fileName = "fast-downloader" + Date.now() + ".mp4";
+      const fileName = `download-${Date.now()}.${
+        type === "video" ? "mp4" : "mp3"
+      }`;
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -49,10 +55,8 @@ submit.addEventListener("click", () => {
       Swal.fire({
         icon: "success",
         title: "Download Complete!",
-        text: "Your video has been downloaded successfully.",
+        text: `Your ${type} has been downloaded successfully.`,
       });
-      input.value = "";
-      input.focus();
     })
     .catch((error) => {
       console.error(error.response ? error.response.data : error.message);
@@ -64,6 +68,18 @@ submit.addEventListener("click", () => {
           : "An unexpected error occurred.",
       });
     });
+  input.value = "";
+  input.focus();
+  input.innerText = "";
+}
+
+// Attach event listeners to buttons
+videoButton.addEventListener("click", () => {
+  downloadMedia("video");
+});
+
+audioButton.addEventListener("click", () => {
+  downloadMedia("audio");
 });
 
 !(function (a, b) {

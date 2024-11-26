@@ -2,7 +2,8 @@ from flask import Flask, request, Response, jsonify, render_template
 from yt_dlp import YoutubeDL
 import io
 import requests
-from werkzeug.utils import quote as url_quote
+
+# from werkzeug.utils import quote as url_quote
 
 
 app = Flask(__name__)
@@ -13,50 +14,60 @@ def index():
     return render_template("index.html")
 
 
-def stream_youtube_video(video_url):
+def stream_media(video_url, media_type):
+    """
+    Extracts the direct URL for video or audio based on user choice.
+    """
     try:
-        # Use an in-memory buffer to avoid saving the file
-        buffer = io.BytesIO()
+        # Choose the format based on media_type
+        format_choice = "best" if media_type == "video" else "bestaudio/best"
 
-        # Configure youtube_dl to write to the buffer
         ydl_opts = {
-            "format": "best",  # Best quality
-            "outtmpl": "-",  # Prevent saving to disk
-            "noplaylist": True,  # Do not download playlists
+            "format": format_choice,
+            "noplaylist": True,
+            "quiet": True,
         }
 
         with YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(video_url, download=False)
-            video_stream_url = info["url"]
+            stream_url = info.get("url")
+            title = info.get("title", "media")
 
-            return video_stream_url, info["title"]
+            if not stream_url:
+                raise ValueError("Failed to retrieve a valid stream URL.")
+
+            return stream_url, title
 
     except Exception as e:
-        raise ValueError(f"Failed to retrieve video: {e}")
+        raise ValueError(f"Failed to retrieve media: {e}")
 
 
 @app.route("/download", methods=["POST"])
 def download():
     data = request.json
     video_url = data.get("video_url")
+    media_type = data.get("media_type")
 
-    if not video_url:
-        return jsonify({"error": "video_url is required"}), 400
+    if not video_url or not media_type:
+        return jsonify({"error": "video_url and media_type are required"}), 400
 
     try:
-        video_stream_url, title = stream_youtube_video(video_url)
+        stream_url, title = stream_media(video_url, media_type)
 
-        # Stream video content directly
-        def generate_video_stream():
-            with requests.get(video_stream_url, stream=True) as r:
+        # Stream video/audio content directly
+        def generate_stream():
+            with requests.get(stream_url, stream=True) as r:
                 for chunk in r.iter_content(chunk_size=8192):
                     yield chunk
 
         response = Response(
-            generate_video_stream(),
-            content_type="video/mp4",
+            generate_stream(),
+            content_type="video/mp4" if media_type == "video" else "audio/mpeg",
         )
-        response.headers["Content-Disposition"] = f"attachment; filename={title}.mp4"
+        file_extension = "mp4" if media_type == "video" else "mp3"
+        response.headers["Content-Disposition"] = (
+            f"attachment; filename={title}.{file_extension}"
+        )
         return response
 
     except Exception as e:
