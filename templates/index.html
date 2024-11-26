@@ -3,8 +3,50 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YouTube Video Downloader</title>
+    <title>GTF Downloader - Download Videos and Audio Easily</title>
+
+    <!-- Meta Description -->
+    <meta name="description" content="GTF Downloader is a simple and fast tool to download videos and audio from various platforms like YouTube. Enjoy quick and secure downloads with our user-friendly interface." />
+
+    <!-- Keywords -->
+    <meta name="keywords" content="video downloader, audio downloader, YouTube downloader, download videos, download audio, free downloader, fast downloader" />
+
+    <!-- Author -->
+    <meta name="author" content="Oussama HAMMOUCHAMA" />
+
+    <!-- Robots -->
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph (OG) Tags for Social Sharing -->
+    <meta property="og:title" content="GTF Downloader - Download Videos and Audio Easily" />
+    <meta property="og:description" content="GTF Downloader makes it easy to download videos and audio from platforms like YouTube. Quick, free, and user-friendly!" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="GTF Downloader - Download Videos and Audio Easily" />
+    <meta name="twitter:description" content="GTF Downloader makes it easy to download videos and audio from platforms like YouTube. Quick, free, and user-friendly!" />
+    <!-- Favicon -->
+    <link rel="icon" href="../static/download-solid.svg" />
+
+    <!-- Structured Data for Search Engines -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "GTF Downloader",
+        "url": "https://example.com",
+        "description": "GTF Downloader is a fast, free, and secure tool to download videos and audio from YouTube and other platforms.",
+        "creator": {
+            "@type": "Person",
+            "name": "Your Name or Company"
+        },
+        "image": "https://example.com/thumbnail.png",
+        "operatingSystem": "All"
+    }
+    </script>
     <link rel="stylesheet" href="../static/style.css" />
+    <Link rel="stylesheet" href="../static/style2.css"/>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"
       integrity="sha512-DdX/YwF5e41Ok+AI81HI8f5/5UsoxCVT9GKYZRIzpLxb8Twz4ZwPPX+jQMwMhNQ9b5+zDEefc+dcvQoPWGNZ3g=="
@@ -12,6 +54,9 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+     integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+     crossorigin="anonymous" referrerpolicy="no-referrer" />
   </head>
   <body>
     <div id="particles-background" class="vertical-centered-box"></div>
@@ -26,9 +71,18 @@
           
         </div>
         <div class="container">
-          <h1>YouTube Video Downloader</h1>
+          <!-- Header Section -->
+          <header>
+            <h1>🎥 Media Downloader 🎵</h1>
+            <p>
+              Easily download your favorite videos or audio from YouTube or other platforms! 
+              Enter the video URL below and choose whether you want to save it as a video or audio file.
+            </p>
+          </header>
+      
+          <!-- Form Section -->
           <div class="form">
-            <label for="url">Enter YouTube Video URL:</label>
+            <label for="url">Enter Video URL:</label>
             <input
               type="text"
               id="url"
@@ -36,11 +90,23 @@
               required
               placeholder="e.g., https://www.youtube.com/watch?v=..."
             />
+            
+            <!-- Buttons Section -->
             <div class="buttons">
-            <button type="submit" class="mp4" id="video-download">Download Video</button>
-            <button type="button" class="mp3" id="audio-download">Download Audio</button>
+              <button type="submit" class="mp4" id="video-download">
+                Download Video <i class="fa-solid fa-video"></i>
+              </button>
+              <button type="button" class="mp3" id="audio-download">
+                Download Audio <i class="fa-solid fa-music"></i>
+              </button>
+            </div>
           </div>
-          </div>
+      
+          <!-- Footer Section -->
+          <footer>
+            <p>💡 Tip: Ensure the URL is valid to start your download seamlessly.</p>
+            <p>&copy; 2024 Media Downloader | All Rights Reserved | Oussama HM | GTF</p>
+          </footer>
         </div>
       </div>
      

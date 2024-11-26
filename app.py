@@ -3,7 +3,6 @@ from yt_dlp import YoutubeDL
 import io
 import requests
 
-# from werkzeug.utils import quote as url_quote
 
 
 app = Flask(__name__)
@@ -72,6 +71,14 @@ def download():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.after_request
+def set_csp_headers(response):
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com;"
+    )
+    return response
 
 
 if __name__ == "__main__":
