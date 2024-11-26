@@ -9,7 +9,7 @@ function downloadMedia(type) {
     Swal.fire({
       icon: "error",
       title: "Oops...",
-      text: "Please enter a valid YouTube URL!",
+      text: "Please enter a valid  URL!",
     });
     return;
   }

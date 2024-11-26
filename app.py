@@ -2,20 +2,23 @@ from flask import Flask, request, Response, jsonify, render_template, make_respo
 from yt_dlp import YoutubeDL
 import io
 import requests
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 
 app = Flask(__name__)
 
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"],
+)
+
 
 @app.route("/")
+@limiter.limit("10 per minute")
 def index():
-    response = make_response(render_template("index.html"))
-    response.headers["Content-Security-Policy"] = (
-        "default-src 'self'; "
-        "script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; "
-        "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;"
-    )
-    return response
+    return render_template("index.html")
 
 
 def stream_media(video_url, media_type):
@@ -47,6 +50,7 @@ def stream_media(video_url, media_type):
 
 
 @app.route("/download", methods=["POST"])
+@limiter.limit("5 per minute")
 def download():
     data = request.json
     video_url = data.get("video_url")
