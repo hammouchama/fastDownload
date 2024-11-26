@@ -144,3 +144,14 @@ body .vertical-centered-box .content {
     opacity: 1;
   }
 }
+@media screen and (width < 540px) {
+  .container {
+    width: 98%;
+    height: 100vh;
+  }
+  .container footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+}
